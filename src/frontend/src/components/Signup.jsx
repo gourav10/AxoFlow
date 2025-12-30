@@ -5,8 +5,7 @@ function Signup() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
   const navigate = useNavigate();
 
@@ -19,104 +18,129 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic validation
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
     // In a real app, you would send this data to a backend
     if (formData.name && formData.email && formData.password) {
       navigate('/home');
     }
   };
 
+  const handleSocialSignup = (provider) => {
+    // In a real app, this would handle OAuth
+    console.log(`Sign up with ${provider}`);
+    // For demo, just navigate to home
+    navigate('/home');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Create Account
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen bg-blue-500 flex items-center justify-center p-8">
+      <div className="bg-white rounded-3xl shadow-2xl flex w-full max-w-6xl overflow-hidden" style={{ minHeight: '600px' }}>
+        {/* Left Side - Branding */}
+        <div className="w-1/2 bg-gradient-to-br from-blue-400 to-blue-600 p-12 flex flex-col justify-between text-white relative">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
-              placeholder="John Doe"
-              required
-            />
+            <h1 className="text-4xl font-light leading-relaxed mb-4">
+              Need webdesign<br />
+              for your business?<br />
+              <span className="font-bold text-blue-200">Design Spacee</span><br />
+              will help you.
+            </h1>
           </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
-              placeholder="you@example.com"
-              required
-            />
+          <div className="flex flex-col items-center justify-center flex-grow">
+            <div className="w-64 h-64 bg-blue-500 rounded-3xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+              <span className="text-9xl font-bold text-blue-200">S</span>
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
-              placeholder="••••••••"
-              required
-            />
+          <div className="text-sm text-blue-100">
+            figma.com/@designspacee
+          </div>
+        </div>
+
+        {/* Right Side - Create Account Form */}
+        <div className="w-1/2 bg-gray-50 p-12 flex flex-col justify-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-8">
+            Create Account
+          </h2>
+
+          {/* Social Sign-up Buttons */}
+          <div className="flex gap-4 mb-8">
+            <button
+              onClick={() => handleSocialSignup('Google')}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700"
+            >
+              Sign up with Google
+            </button>
+            <button
+              onClick={() => handleSocialSignup('Facebook')}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700"
+            >
+              Sign up with Facebook
+            </button>
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
-              placeholder="••••••••"
-              required
-            />
+          {/* OR Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-grow border-t-2 border-gray-300"></div>
+            <span className="mx-4 text-gray-500 font-semibold">OR</span>
+            <div className="flex-grow border-t-2 border-gray-300"></div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-200 shadow-lg hover:shadow-xl"
-          >
-            Sign Up
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
+                placeholder="Full Name"
+                required
+              />
+            </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
-            Already have an account?{' '}
-            <Link to="/" className="text-purple-600 hover:text-purple-700 font-semibold">
-              Sign In
-            </Link>
-          </p>
+            <div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
+                placeholder="Email"
+                required
+              />
+            </div>
+
+            <div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
+                placeholder="Password"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg mt-8"
+            >
+              Create Account
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <Link to="/" className="text-blue-600 hover:text-blue-700 font-semibold">
+                Login
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
