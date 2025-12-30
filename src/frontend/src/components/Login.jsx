@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axoflowLogo from '../assets/axoflow_logo.png';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -22,21 +23,17 @@ function Login() {
         <div className="w-1/2 bg-gradient-to-br from-blue-400 to-blue-600 p-12 flex flex-col justify-between text-white relative">
           <div>
             <h1 className="text-4xl font-light leading-relaxed mb-4">
-              Need webdesign<br />
-              for your business?<br />
-              <span className="font-bold text-blue-200">Design Spacee</span><br />
-              will help you.
+              Tired of manual<br />
+              job applications?<br />
+              <span className="font-bold text-blue-200">AxoFlow</span><br />
+              automates it for you.
             </h1>
           </div>
 
           <div className="flex flex-col items-center justify-center flex-grow">
-            <div className="w-64 h-64 bg-blue-500 rounded-3xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
-              <span className="text-9xl font-bold text-blue-200">S</span>
+            <div className="w-64 h-64 bg-white rounded-3xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <img src={axoflowLogo} alt="AxoFlow Logo" className="w-full h-full object-cover" />
             </div>
-          </div>
-
-          <div className="text-sm text-blue-100">
-            figma.com/@designspacee
           </div>
         </div>
 
