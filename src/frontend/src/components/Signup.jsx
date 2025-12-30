@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axoflowLogo from '../assets/axoflow_logo.png';
+import { authAPI } from '../services/api';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,8 @@ function Signup() {
     email: '',
     password: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,11 +20,25 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, you would send this data to a backend
-    if (formData.name && formData.email && formData.password) {
+    setError('');
+    setLoading(true);
+
+    try {
+      // Call the backend API to register
+      await authAPI.register(formData.name, formData.email, formData.password);
+
+      // Auto-login after successful registration
+      await authAPI.login(formData.email, formData.password);
+
+      // Navigate to home
       navigate('/home');
+    } catch (err) {
+      // Display error message
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,13 +80,15 @@ function Signup() {
           <div className="flex gap-4 mb-8">
             <button
               onClick={() => handleSocialSignup('Google')}
-              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700"
+              disabled={loading}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Sign up with Google
             </button>
             <button
               onClick={() => handleSocialSignup('Facebook')}
-              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700"
+              disabled={loading}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200 font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Sign up with Facebook
             </button>
@@ -83,6 +102,12 @@ function Signup() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
+
             <div>
               <input
                 id="name"
@@ -93,6 +118,7 @@ function Signup() {
                 className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
                 placeholder="Full Name"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -106,6 +132,7 @@ function Signup() {
                 className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
                 placeholder="Email"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -119,14 +146,16 @@ function Signup() {
                 className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
                 placeholder="Password"
                 required
+                disabled={loading}
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg mt-8"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg mt-8 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 

@@ -1,18 +1,31 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axoflowLogo from '../assets/axoflow_logo.png';
+import { authAPI } from '../services/api';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For now, just navigate to home on submit
-    // In a real app, you would validate credentials here
-    if (email && password) {
+    setError('');
+    setLoading(true);
+
+    try {
+      // Call the backend API
+      const response = await authAPI.login(email, password);
+
+      // Navigate to home on successful login
       navigate('/home');
+    } catch (err) {
+      // Display error message
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,6 +57,12 @@ function Login() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
+
             <div>
               <input
                 id="email"
@@ -53,6 +72,7 @@ function Login() {
                 className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
                 placeholder="Email"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -65,14 +85,16 @@ function Login() {
                 className="w-full px-0 py-3 border-0 border-b-2 border-gray-300 bg-transparent focus:border-blue-500 focus:ring-0 outline-none transition text-gray-700 placeholder-gray-400"
                 placeholder="Password"
                 required
+                disabled={loading}
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg mt-8"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg mt-8 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
-              Login
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
